@@ -3,16 +3,15 @@ let myArray = [];
 
 
 
-
-if(window.localStorage.getItem('book'))
-{
-    myArray =JSON.parse(localStorage.getItem('book'))
+if (window.localStorage.getItem('book')) {
+  myArray = JSON.parse(localStorage.getItem('book'))
 }
 
 
 class Book {
   static count = 1;
-  constructor(title, author, isbn) {
+  constructor(title, author, isbn, idObject) {
+    this.idObject = Math.random(Math.floor)
     this.title = title;
     this.author = author;
     this.isbn = isbn;
@@ -24,7 +23,7 @@ class UI {
   addBookToList(book) {
     const list = document.getElementById("book-list");
     const row = document.createElement("tr");
-    row.setAttribute('id',book.count)
+    row.setAttribute('idObject', book.idObject)
     row.innerHTML = ` 
         <td>${book.title}</td>
         <td>${book.author}</td>
@@ -49,7 +48,7 @@ document.getElementById("book-form").addEventListener("submit", (e) => {
   const ISBN = document.getElementById("ISBN").value;
 
   if (title && author && ISBN) {
-    document.getElementById("book-list").innerHTML=''
+    document.getElementById("book-list").innerHTML = ''
     let book = new Book(title, author, ISBN);
     myArray.push(book);
     let ui = new UI();
@@ -80,28 +79,35 @@ document.getElementById("book-form").addEventListener("submit", (e) => {
 
 
 
-document.body.onclick = (e) => 
-{
-    if(e.target.classList.contains('clears'))
-    {
-        cleatID(e.target.parentElement.id)
-        e.target.parentElement.remove()
-    }
+document.body.onclick = (e) => {
+  if (e.target.classList.contains('clears')) {
+    // cleatID(e.target.parentElement.getAttribute('idObject'))
+    e.target.parentElement.remove()
+    // console.log(myArray)
+    var idObjectDeleta = +e.target.parentElement.getAttribute('idObject')
+    var upDate = myArray.filter((e) => e.idObject !== idObjectDeleta)
+    window.localStorage.setItem('book', JSON.stringify(upDate))
+  }
 }
-function localStorageBooks(Books)
-{
-    window.localStorage.setItem('book',JSON.stringify(Books))
+function localStorageBooks(Books) {
+  window.localStorage.setItem('book', JSON.stringify(Books))
 }
 
-function getDataFromLocalStorage()
-{
-  let data =JSON.parse(window.localStorage.getItem('book'))
-  if(data)
-  {
+function getDataFromLocalStorage() {
+  let data = JSON.parse(window.localStorage.getItem('book'))
+  if (data) {
     let ui = new UI();
     data.map((book) => ui.addBookToList(book))
   }
 }
 
 
+// delete
 
+
+
+
+// console.log(Math.random(Math.floor))
+
+
+// console.log(myArray)
